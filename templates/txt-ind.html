@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Note Taking App</title>
+
+    <!-- Include CryptoJS library for AES encryption -->
+    <script src="https://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/aes.js"></script>
+</head>
+<body>
+    <h1>Welcome, {{ user.name }}!</h1>
+    <form action="{{ url_for('add_note') }}" method="post">
+        <label for="note_content">Note Content:</label>
+        <textarea id="note_content" name="note_content" required></textarea>
+
+        <!-- Add a hidden field for encryption key -->
+        <input type="hidden" id="encryption_key" name="encryption_key">
+
+        <button type="button" onclick="addNote()">Add Note</button>
+    </form>
+
+    <h2>Your Notes:</h2>
+    <ul>
+        {% for note in notes %}
+            <li>
+                <span>{{ note.timestamp }}</span>
+                <p>{{ decryptNoteContent(note.content, user.encryption_key) }}</p>
+                <a href="{{ url_for('delete_note', note_id=note.id) }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <script>
+        function generateEncryptionKey() {
+            var keyArray = new Uint8Array(16);  // 128 bits (16 bytes)
+            crypto.getRandomValues(keyArray);
+            return Array.from(keyArray, byte => ('0' + (byte & 0xFF).toString(16)).slice(-2)).join('');
+        }
+
+        function encryptNoteContent(noteContent, encryptionKey) {
+            var encryptedContent = CryptoJS.AES.encrypt(noteContent, encryptionKey);
+            return encryptedContent.toString();
+        }
+
+        function decryptNoteContent(encryptedContent, encryptionKey) {
+            var decryptedBytes = CryptoJS.AES.decrypt(encryptedContent, encryptionKey);
+            return decryptedBytes.toString(CryptoJS.enc.Utf8);
+        }
+
+        function addNote() {
+            // Generate a random encryption key
+            var encryptionKey = generateEncryptionKey();
+
+            // Set the encryption key in the hidden field
+            document.getElementById('encryption_key').value = encryptionKey;
+
+            // Encrypt the note content before submitting the form
+            var noteContent = document.getElementById('note_content').value;
+            var encryptedNoteContent = encryptNoteContent(noteContent, encryptionKey);
+            document.getElementById('note_content').value = encryptedNoteContent;
+
+            // Submit the form
+            document.forms[0].submit();
+        }
+    </script>
+</body>
+</html>

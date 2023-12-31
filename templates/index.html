@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Note Taking App</title>
+    <style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    color: #333;
+    position: relative;
+    overflow: hidden; /* Add this line to hide scrollbars */
+}
+
+.header {
+    background-color: rgba(15, 13, 125, 0.8);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+}
+
+.header h1 {
+    color: #fff;
+    font-size: 2rem;
+}
+
+.logout {
+    background-color: #f10f0f;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.logout:hover {
+    background-color: #c20000;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 80vw;
+    margin: 0 auto;
+    padding-top: 2rem;
+}
+
+form {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 48%;
+    text-align: left;
+    animation: fadeInUp 0.5s ease-in-out;
+    margin-right: 2%;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    width: 48%;
+    text-align: justify;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #c80000;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+label {
+    display: flex;
+    margin: 10px 0 5px;
+    color: #555;
+    font-weight: bold;
+}
+
+textarea {
+    width: 100%;
+    max-width: 100%;
+    max-height: 20rem;
+    padding: 1rem;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+button {
+    background-color: #0f0d7d;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #0a0958;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.scrollable-content {
+    overflow-y: auto;
+    max-height: calc(100vh - 13rem);
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome, {{ user.name }}!</h1>
+        <button class="logout" onclick="location.href='/logout'">Logout</button>
+    </div>
+    <div class="container">
+        <form action="/add_note" method="post">
+            <h2>Your Notes:</h2>
+            <label for="note_content">Enter Note:</label>
+            <textarea id="note_content" name="note_content" required></textarea>
+            <button type="submit">Add Note</button>
+        </form>
+        <div class="scrollable-content">
+            <ul>
+                {% for note in notes %}
+                    <li>
+                        {{ note[1] }} ({{ note[2] }}) |
+                        <a href="{{ url_for('delete_note', note_id=note[0]) }}">Delete</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</body>
+</html>

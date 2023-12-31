@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #dbdbdb;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 35rem;
+            text-align: center;
+            animation: fadeInUp 0.5s ease-in-out;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        /* i {
+            color: #ecf0f1;
+        } */
+
+        label {
+            /* display: none; */
+            display: block;
+            margin: 10px 0 5px;
+            color: #555;
+            text-align: left;
+        }
+
+        i{
+            color: #434343be;
+            font-size: 0.7rem;
+        }
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            background-color: #0f0d7d;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0a0958;
+        }
+
+        p {
+            margin-top: 15px;
+            color: #555;
+        }
+
+        a {
+            color: #0f0d7d;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <form method="post" action="{{ url_for('register') }}">
+        <h2>REGISTER NOW</h2>
+        <i>Note: Password Must contain 1 Capital letter, 1 Small Letter, 1 Symbol, and minimum 08 Characters.</i><br><br>
+
+        <label for="username">Username:</label>
+        <input type="text" name="username" required>
+        
+        <label for="password">Password:</label>
+        <input type="password" name="password" required>
+
+        <label for="name">Name:</label>
+        <input type="text" name="name" required>
+
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" name="phone_number" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+
+        <label for="company_or_school">Company/School:</label>
+        <input type="text" name="company_or_school" required>
+
+        <button type="submit">Register</button>
+        <p>Already have an account? <a href="/login">Login</a></p>
+    </form>
+
+    {% if message %}
+        <p style="color: red;">{{ message }}</p>
+    {% endif %}
+
+    
+</body>
+</html>
